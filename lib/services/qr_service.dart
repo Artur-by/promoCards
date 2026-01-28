@@ -14,7 +14,7 @@ class QRServiceException implements Exception {
 
 class QRService {
                           //prod http://1c.ntsretail.by:8880
-  static const String baseUrl = 'http://1c.ntsretail.by:8880';
+  static const String baseUrl = 'http://192.168.3.99:8080';
 
   Future<QRData> getQRData(String cardId) async {
     final url = Uri.parse('$baseUrl/exec?action=GetQR.getQR&p=$cardId');

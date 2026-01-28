@@ -56,7 +56,7 @@ class _QRInfoPageState extends State<QRInfoPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Информация о промо-карте'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.lightBlue[400],
       ),
       body: _isLoading
           ? const Center(
@@ -115,17 +115,18 @@ class _QRInfoPageState extends State<QRInfoPage> {
                           ),
                         ],
                         const SizedBox(height: 32),
-                        ElevatedButton.icon(
-                          onPressed: _loadQRData,
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Повторить'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
+                        if (!_isNotFound)
+                          ElevatedButton.icon(
+                            onPressed: _loadQRData,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Повторить'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -155,21 +156,12 @@ class _QRInfoPageState extends State<QRInfoPage> {
                           const SizedBox(height: 16),
                           _buildInfoCard(
                             'Действительно до',
-                            _qrData!.validUntil,
+                            _formatDate(_qrData!.validUntil),
                             Icons.calendar_today,
                             Colors.orange,
                           ),
                           const SizedBox(height: 16),
-                          _buildInfoCard(
-                            'Статус',
-                            _qrData!.status,
-                            _qrData!.status == 'Погашена'
-                                ? Icons.check_circle
-                                : Icons.info,
-                            _qrData!.status == 'Погашена'
-                                ? Colors.grey
-                                : Colors.purple,
-                          ),
+                          _buildStatusCard(_qrData!),
                         ],
                       ),
                     ),
@@ -195,10 +187,16 @@ class _QRInfoPageState extends State<QRInfoPage> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: label == 'Статус'
+                    ? color
+                    : color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: color, size: 28),
+              child: Icon(
+                icon,
+                color: label == 'Статус' ? Colors.white : color,
+                size: 28,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -228,6 +226,94 @@ class _QRInfoPageState extends State<QRInfoPage> {
       ),
     );
   }
+
+  String _formatDate(String raw) {
+    try {
+      final parsed = DateTime.tryParse(raw);
+      if (parsed == null) return raw;
+
+      final day = parsed.day.toString().padLeft(2, '0');
+      final month = parsed.month.toString().padLeft(2, '0');
+      final year = parsed.year.toString();
+
+      return '$day-$month-$year';
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  Widget _buildStatusCard(QRData data) {
+    final status = data.status;
+
+    // Цвет фона под иконкой и самой иконки в зависимости от статуса
+    Color iconBackgroundColor;
+    Color iconColor;
+    const IconData icon = Icons.credit_card;
+
+    if (status == 'Валидна') {
+      iconBackgroundColor = Colors.green[400]!;
+      iconColor = Colors.white;
+    } else if (status == 'Погашена') {
+      iconBackgroundColor = Colors.orange[400]!;
+      iconColor = Colors.white;
+    } else if (status == 'Истекшая') {
+      iconBackgroundColor = Colors.red[400]!;
+      iconColor = Colors.white;
+    } else {
+      iconBackgroundColor = Colors.grey[400]!;
+      iconColor = Colors.white;
+    }
+
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: iconBackgroundColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: 28,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Статус',
+                    style:
+                        Theme.of(context).textTheme.labelMedium?.copyWith(
+                              color: Colors.black54,
+                              fontSize: 12,
+                            ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    status,
+                    style:
+                        Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
-
-

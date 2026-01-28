@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'QR Promo Card Scanner',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
       ),
       home: const QRScannerHome(),
@@ -78,7 +78,7 @@ class _QRScannerHomeState extends State<QRScannerHome> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('QR Promo Card Scanner'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.lightBlue[400],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -89,7 +89,7 @@ class _QRScannerHomeState extends State<QRScannerHome> {
               Icon(
                 Icons.qr_code_scanner,
                 size: 120,
-                color: Colors.deepPurple[300],
+                color: Colors.lightBlue[200],
               ),
               const SizedBox(height: 32),
               Text(
@@ -147,42 +147,6 @@ class _QRScannerHomeState extends State<QRScannerHome> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.info_outline, color: Colors.blue[700]),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Для тестирования:',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      SelectableText(
-                        'Откройте URL с параметром ?p=ID\nНапример: http://localhost:port/?p=999999999999',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      SelectableText(
-                        'Backend URL для теста:\nhttp://localhost:7651/exec?action=GetQR.getQR&p=999999999999',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontFamily: 'monospace',
-                              color: Colors.grey[600],
-                            ),
                       ),
                     ],
                   ),
