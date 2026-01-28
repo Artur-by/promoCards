@@ -155,7 +155,7 @@ class _QRInfoPageState extends State<QRInfoPage> {
                           ),
                           const SizedBox(height: 16),
                           _buildInfoCard(
-                            'Действительно до',
+                            'Действительна до',
                             _formatDate(_qrData!.validUntil),
                             Icons.calendar_today,
                             Colors.orange,

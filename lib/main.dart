@@ -99,7 +99,7 @@ class _QRScannerHomeState extends State<QRScannerHome> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Откройте ссылку из QR-кода промо-карты\nили введите ID карты вручную',
+                'Отсканируйте QR-код камерой смартфона\nили введите ID карты вручную',
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
